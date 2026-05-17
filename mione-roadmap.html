@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mione — 產品開發路徑圖</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #faf9f7;
+      color: #2d2d2d;
+      line-height: 1.6;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: white;
+      padding: 64px 32px 48px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 200;
+      letter-spacing: 12px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero-tagline {
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 32px;
+    }
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .hero-meta span {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+    }
+    .hero-meta strong { color: rgba(255,255,255,0.9); }
+
+    /* Layout */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* Summary Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 40px 0;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid #eee;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    .card-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    /* Section */
+    section { margin: 48px 0; }
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #999;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Decision Log */
+    .decision-item {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .decision-label { font-size: 12px; color: #999; }
+    .decision-value { font-weight: 500; color: #1a1a2e; }
+    .decision-note { font-size: 13px; color: #666; margin-top: 4px; }
+
+    /* Roadmap */
+    .roadmap { position: relative; }
+    .phase {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      cursor: pointer;
+    }
+    .phase-number {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .phase.done .phase-number { background: #e8f5e9; color: #2e7d32; }
+    .phase.active .phase-number { background: #fff3e0; color: #e65100; }
+    .phase.upcoming .phase-number { background: #f5f5f5; color: #9e9e9e; }
+
+    .phase-title { font-weight: 600; font-size: 15px; flex: 1; }
+    .phase-timeline {
+      font-size: 12px;
+      color: #999;
+      background: #f8f8f8;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .phase-status {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .phase.done .phase-status { background: #e8f5e9; color: #2e7d32; }
+    .phase.active .phase-status { background: #fff3e0; color: #e65100; }
+    .phase.upcoming .phase-status { background: #f5f5f5; color: #9e9e9e; }
+
+    .phase-body { padding: 0 24px 20px 76px; }
+    .task-list { list-style: none; }
+    .task-list li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .task-list li::before { content: '—'; color: #ddd; flex-shrink: 0; margin-top: 1px; }
+    .task-list li.done { color: #999; }
+    .task-list li.done::before { content: '✓'; color: #4caf50; }
+    .task-list li.urgent { color: #e65100; font-weight: 500; }
+    .task-list li.urgent::before { content: '!'; color: #e65100; font-weight: 700; }
+    .task-note {
+      font-size: 12px;
+      color: #bbb;
+      margin-left: 20px;
+      display: block;
+    }
+
+    /* Timeline Bar */
+    .timeline-bar {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      padding: 32px;
+      margin-bottom: 16px;
+    }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 100px;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .timeline-row:last-child { margin-bottom: 0; }
+    .tl-label { font-size: 13px; color: #555; }
+    .tl-bar-wrap { background: #f5f5f5; border-radius: 4px; height: 8px; position: relative; }
+    .tl-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #1a1a2e, #0f3460);
+    }
+    .tl-bar.done { background: linear-gradient(90deg, #4caf50, #81c784); }
+    .tl-bar.active { background: linear-gradient(90deg, #ff9800, #ffb74d); }
+    .tl-time { font-size: 12px; color: #999; text-align: right; }
+
+    /* Alert */
+    .alert {
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .alert.red { background: #fff5f5; border: 1px solid #ffcdd2; color: #c62828; }
+    .alert.orange { background: #fff8f0; border: 1px solid #ffe0b2; color: #bf360c; }
+    .alert.green { background: #f1f8e9; border: 1px solid #c5e1a5; color: #33691e; }
+    .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Files */
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .file-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s;
+    }
+    .file-card:hover { border-color: #1a1a2e; }
+    .file-icon { font-size: 20px; }
+    .file-name { font-size: 13px; font-weight: 500; color: #1a1a2e; }
+    .file-path { font-size: 11px; color: #bbb; margin-top: 2px; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      font-size: 12px;
+      color: #bbb;
+      border-top: 1px solid #eee;
+      margin-top: 64px;
+    }
+
+    @media (max-width: 600px) {
+      .decision-item { grid-template-columns: 1fr; gap: 4px; }
+      .timeline-row { grid-template-columns: 120px 1fr; }
+      .tl-time { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">Product Development Roadmap</div>
+  <h1>Mione</h1>
+  <p class="hero-tagline">"Your skin is reactive. Your cream shouldn't be."</p>
+  <div class="hero-meta">
+    <span><strong>Product</strong> Mineral Face Cream</span>
+    <span><strong>Market</strong> United States (DTC)</span>
+    <span><strong>Stage</strong> Concept → Formulation</span>
+    <span><strong>Updated</strong> 2026-05-17</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    <div class="card">
+      <div class="card-label">品牌名稱</div>
+      <div class="card-value">Mione</div>
+      <div class="card-sub">源自 Hermione，Class 3 初步確認無衝突</div>
+    </div>
+    <div class="card">
+      <div class="card-label">目標客群</div>
+      <div class="card-value">敏感肌</div>
+      <div class="card-sub">含玫瑰痤瘡、反應性肌膚、屏障受損</div>
+    </div>
+    <div class="card">
+      <div class="card-label">售價</div>
+      <div class="card-value">$25–35</div>
+      <div class="card-sub">DTC Shopify，目標 COGS ≤ $7.50</div>
+    </div>
+    <div class="card">
+      <div class="card-label">核心成分</div>
+      <div class="card-value">ZnO ≤ 2%</div>
+      <div class="card-sub">+ Ceramide + Panthenol，無香精</div>
+    </div>
+    <div class="card">
+      <div class="card-label">法規框架</div>
+      <div class="card-value">Cosmetic</div>
+      <div class="card-sub">MOCRA 2022，非 FDA OTC Drug</div>
+    </div>
+    <div class="card">
+      <div class="card-label">估計上市</div>
+      <div class="card-value">12–18 個月</div>
+      <div class="card-sub">取決於配方開發 + 穩定性測試</div>
+    </div>
+  </div>
+
+  <!-- Urgent Actions -->
+  <section>
+    <div class="section-title">🔴 立刻要做的事</div>
+    <div class="alert red">
+      <span class="alert-icon">⚡</span>
+      <div><strong>域名註冊</strong> — 品牌名確定當天就要買。查 mione.com / mioneskin.com / getmione.com，約 $15/年（Namecheap 或 GoDaddy）</div>
+    </div>
+    <div class="alert red">
+      <span class="alert-icon">⚡</span>
+      <div><strong>聯繫 Contract Lab</strong> — Formulation Brief 已備妥，發給 Innacos Labs、RainShadow Labs、Dynamic Blending。實驗室回覆需 1–2 週，越早發越好。</div>
+    </div>
+    <div class="alert orange">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>USPTO 商標申請</strong> — Class 3，$250 起。可自行透過 TEAS 系統申請，或委託商標律師（$500–$1,500）。越早申請越早保障。</div>
+    </div>
+  </section>
+
+  <!-- Key Decisions -->
+  <section>
+    <div class="section-title">已確定的決策</div>
+
+    <div class="decision-item">
+      <div>
+        <div class="decision-label">品牌名稱</div>
+      </div>
+      <div>
+        <div class="decision-value">Mione</div>
+        <div class="decision-note">源自 Hermione 後半部，希臘語音感。USPTO Class 3 初步查詢無衝突，正式申請前建議委託律師完整清查。</div>
+      </div>
+    </div>
+
+    <div class="decision-item">
+      <div><div class="decision-label">目標客群</div></div>
+      <div>
+        <div class="decision-value">敏感肌（含玫瑰痤瘡、反應性肌膚）</div>
+        <div class="decision-note">競品研究顯示此客群在美國礦物保濕面霜市場幾乎無專業品牌服務。</div>
+      </div>
+    </div>
+
+    <div class="decision-item">
+      <div><div class="decision-label">核心訴求</div></div>
+      <div>
+        <div class="decision-value">"Your skin is reactive. Your cream shouldn't be."</div>
+        <div class="decision-note">礦物修護 × 情感訴求。命中敏感肌消費者最大痛點，礦物成分隱含其中。</div>
+      </div>
+    </div>
+
+    <div class="decision-item">
+      <div><div class="decision-label">SPF 決策</div></div>
+      <div>
+        <div class="decision-value">先不做 SPF，未來另立 Mione SPF30</div>
+        <div class="decision-note">美國 SPF 產品屬 FDA OTC Drug，需 Sunscreen Monograph 合規 + OTC cGMP 工廠 + in vivo 測試，開發成本與時間遠高於化妝品。</div>
+      </div>
+    </div>
+
+    <div class="decision-item">
+      <div><div class="decision-label">定價 + 通路</div></div>
+      <div>
+        <div class="decision-value">$25–35，DTC（Shopify）</div>
+        <div class="decision-note">$10–20 在 DTC 運費成本結構下無法盈利。$30 售價毛利約 52%，扣除 CAC 後有合理空間。</div>
+      </div>
+    </div>
+
+    <div class="decision-item">
+      <div><div class="decision-label">配方紅線</div></div>
+      <div>
+        <div class="decision-value">ZnO ≤ 2%、無香精、無刺激酒精</div>
+        <div class="decision-note">ZnO 超過 2% 可能被 FDA 認定為未申報防曬 OTC Drug。無香精是敏感肌訴求的底線。</div>
+      </div>
+    </div>
+
+    <div class="decision-item">
+      <div><div class="decision-label">法規框架</div></div>
+      <div>
+        <div class="decision-value">美國化妝品，MOCRA 2022</div>
+        <div class="decision-note">CMO 須符合 ISO 22716。FDA 正式 GMP 規則預計 2026 年底定案。產品上市後 120 天內提交 FDA Product Listing。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section>
+    <div class="section-title">開發路徑</div>
+    <div class="roadmap">
+
+      <!-- Phase 1 -->
+      <div class="phase done">
+        <div class="phase-header">
+          <div class="phase-number">1</div>
+          <div class="phase-title">產品定義</div>
+          <div class="phase-status">✓ 完成</div>
+          <div class="phase-timeline">2026-05</div>
+        </div>
+        <div class="phase-body">
+          <ul class="task-list">
+            <li class="done">確定目標客群 → 敏感肌</li>
+            <li class="done">美國市場競品研究（4 個競品，確認市場空缺）</li>
+            <li class="done">訂定售價 $25–35 + 通路 DTC</li>
+            <li class="done">確定核心訴求（礦物修護 × 情感訴求）</li>
+            <li class="done">品牌命名 → Mione</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase active">
+        <div class="phase-header">
+          <div class="phase-number">2</div>
+          <div class="phase-title">配方開發</div>
+          <div class="phase-status">進行中</div>
+          <div class="phase-timeline">2026-05 → 2026-11</div>
+        </div>
+        <div class="phase-body">
+          <ul class="task-list">
+            <li class="done">撰寫 Formulation Brief（含成分規格、法規限制、膚感目標）</li>
+            <li class="done">整理 Contract Lab 詢問名單（7 家）</li>
+            <li class="urgent">聯繫 contract lab，發送 Formulation Brief ← 現在</li>
+            <li>Lab 回覆 + 報價評估
+              <span class="task-note">預計 D+14 天</span>
+            </li>
+            <li>配方初稿 + 第一次打樣
+              <span class="task-note">預計 D+60 天</span>
+            </li>
+            <li>配方修改 + 第二次打樣
+              <span class="task-note">預計 D+90 天</span>
+            </li>
+            <li>最終配方確認
+              <span class="task-note">預計 D+120 天</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase upcoming">
+        <div class="phase-header">
+          <div class="phase-number">3</div>
+          <div class="phase-title">安全與穩定性測試</div>
+          <div class="phase-status">待開始</div>
+          <div class="phase-timeline">2026-09 → 2027-03</div>
+        </div>
+        <div class="phase-body">
+          <ul class="task-list">
+            <li>穩定性測試（加速 45°C × 3 個月 + 室溫 12 個月）
+              <span class="task-note">與配方開發同步啟動，Lab 通常會處理</span>
+            </li>
+            <li>Preservative Efficacy Test（防腐劑挑戰測試）</li>
+            <li>皮膚刺激性測試（Patch Test 或 HRIPT）</li>
+            <li>成品安全評估報告（MOCRA 合規必要文件）</li>
+            <li>包材相容性測試</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase upcoming">
+        <div class="phase-header">
+          <div class="phase-number">4</div>
+          <div class="phase-title">製造與品管</div>
+          <div class="phase-status">待開始</div>
+          <div class="phase-timeline">2026-11 → 2027-03</div>
+        </div>
+        <div class="phase-body">
+          <ul class="task-list">
+            <li>CMO 確認（ISO 22716 認證設施）</li>
+            <li>首批量產規格確定（容量、包材、MOQ）</li>
+            <li>包材選定（廣口罐 vs 氣泵罐、材質、尺寸）</li>
+            <li>Batch record 建立</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase upcoming">
+        <div class="phase-header">
+          <div class="phase-number">5</div>
+          <div class="phase-title">上市準備</div>
+          <div class="phase-status">待開始</div>
+          <div class="phase-timeline">2026-12 → 2027-06</div>
+        </div>
+        <div class="phase-body">
+          <ul class="task-list">
+            <li class="urgent">域名註冊（mione.com / mioneskin.com）← 立刻</li>
+            <li class="urgent">USPTO 商標申請 Class 3 ← 盡快</li>
+            <li>產品名稱確定（Mione Calm Cream？Mione Mineral Cream？）</li>
+            <li>視覺語言 / 包裝設計</li>
+            <li>標籤設計（MOCRA 合規：INCI、淨含量、RP 聯絡方式）</li>
+            <li>Shopify DTC 網站架設</li>
+            <li>不良反應回報機制（網站聯絡表單）</li>
+            <li>定價 + 運費策略（滿額免運門檻、訂閱方案）</li>
+            <li>上市行銷計畫（社群、KOL、PR）</li>
+            <li>FDA Product Listing（上市後 120 天內）</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Timeline Overview -->
+  <section>
+    <div class="section-title">時間軸概覽</div>
+    <div class="timeline-bar">
+      <div class="timeline-row">
+        <div class="tl-label">產品定義</div>
+        <div class="tl-bar-wrap"><div class="tl-bar done" style="width:100%"></div></div>
+        <div class="tl-time">完成</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-label">品牌命名</div>
+        <div class="tl-bar-wrap"><div class="tl-bar done" style="width:100%"></div></div>
+        <div class="tl-time">完成</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-label">域名 + 商標</div>
+        <div class="tl-bar-wrap"><div class="tl-bar active" style="width:5%"></div></div>
+        <div class="tl-time">立刻</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-label">配方開發</div>
+        <div class="tl-bar-wrap"><div class="tl-bar active" style="width:10%"></div></div>
+        <div class="tl-time">D+120 天</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-label">穩定性測試</div>
+        <div class="tl-bar-wrap"><div class="tl-bar" style="width:0%"></div></div>
+        <div class="tl-time">3–12 個月</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-label">包裝設計</div>
+        <div class="tl-bar-wrap"><div class="tl-bar" style="width:0%"></div></div>
+        <div class="tl-time">配方確認後</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-label">量產 + 上市</div>
+        <div class="tl-bar-wrap"><div class="tl-bar" style="width:0%"></div></div>
+        <div class="tl-time">12–18 個月</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Legal Notes -->
+  <section>
+    <div class="section-title">法規重點備忘</div>
+    <div class="alert green">
+      <span class="alert-icon">✓</span>
+      <div><strong>無香精配方</strong> — 完全規避 MOCRA 香精過敏原揭露規定（FDA 規則至今仍未定案）</div>
+    </div>
+    <div class="alert green">
+      <span class="alert-icon">✓</span>
+      <div><strong>ZnO ≤ 2%</strong> — 化妝品成分，非 FDA OTC Drug。製造設施只需 ISO 22716，不需 OTC cGMP（21 CFR Part 211）</div>
+    </div>
+    <div class="alert green">
+      <span class="alert-icon">✓</span>
+      <div><strong>小型企業豁免</strong> — 年銷售額 &lt; $1M 可免做 FDA 設施登記 + Product Listing，但仍建議主動申報</div>
+    </div>
+    <div class="alert orange">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>標籤必要項目</strong> — RP 聯絡方式（2024 年 12 月起生效）、完整 INCI 成分表、淨含量（英制 + 公制）</div>
+    </div>
+    <div class="alert orange">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>不良反應回報</strong> — 嚴重不良反應須於收到通報 15 個工作日內向 FDA 回報。上市前需建立回報機制。</div>
+    </div>
+  </section>
+
+  <!-- Project Files -->
+  <section>
+    <div class="section-title">專案文件</div>
+    <div class="file-grid">
+      <div class="file-card">
+        <div class="file-icon">📋</div>
+        <div>
+          <div class="file-name">Formulation Brief</div>
+          <div class="file-path">Formula/formulation-brief.md</div>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">🔬</div>
+        <div>
+          <div class="file-name">競品分析</div>
+          <div class="file-path">Market/competitor-analysis.md</div>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">🏷️</div>
+        <div>
+          <div class="file-name">品牌定位</div>
+          <div class="file-path">Brand/positioning.md</div>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">⚖️</div>
+        <div>
+          <div class="file-name">MOCRA 合規清單</div>
+          <div class="file-path">Regulatory/MOCRA-2022-compliance-checklist.md</div>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">🏭</div>
+        <div>
+          <div class="file-name">Contract Lab 名單</div>
+          <div class="file-path">Sourcing/contract-lab-shortlist.md</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Mione — Mineral Face Cream for Sensitive Skin &nbsp;·&nbsp; 更新於 2026-05-17 &nbsp;·&nbsp; chingyaosu/Brainstorm
+</footer>
+
+</body>
+</html>
