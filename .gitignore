@@ -18,3 +18,8 @@ package-lock.json
 # 暫存檔
 *.tmp
 ~$*
+
+# Sub-project repos (managed as independent git repos)
+Project/Protein-Manufacturing/
+Project/Mineral-Face-Cream/
+Project/Food-Color-Indicator/
