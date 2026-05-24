@@ -9,7 +9,11 @@
   1. `git add` + `git commit` + `git push`（各 sub-project 獨立 repo，如 Protein-Manufacturing、Mineral-Face-Cream 等）
   2. 更新各 sub-project 對應的 Obsidian Work Progress（`Obsidian/Brainstorm/<ProjectName>/Work Progress.md`）
   3. 若 Brainstorm 主 repo 本身也有變更，一併 commit + push
-- **接續工作**：對 Claude 說「**開工**」→ 讀 Work Progress、報告 git 狀態、建議下一步
+- **接續工作**：對 Claude 說「**開工**」→ 執行以下動作：
+  1. 讀 Brainstorm 主 Work Progress（`Obsidian/Brainstorm/Work Progress.md`）
+  2. 讀所有 sub-project 的 Work Progress（`Obsidian/Brainstorm/<ProjectName>/Work Progress.md`）
+  3. 對所有 sub-project repo 執行 `git status`，回報哪些有未提交變更
+  4. 整合回報：各專案目前狀態、上次做到哪、建議下一步
 
 ## 工作桌 + 三個家
 - 📋 GDrive 工作桌：`/Users/yao/My Drive/Brainstorm/`（自動跨電腦同步）
